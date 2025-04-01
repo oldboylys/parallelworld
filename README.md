@@ -1,6 +1,6 @@
 # 🌌 Parallel World - 平行世界
 
-![Header Image](https://via.placeholder.com/1200x400/1a1a2e/ffffff?text=Parallel+World) *（建议替换为实际项目相关图片）*
+<!-- ![Header Image](https://via.placeholder.com/1200x400/1a1a2e/ffffff?text=Parallel+World) *（建议替换为实际项目相关图片）* -->
 
 ## ✨ 项目初心
 
@@ -81,4 +81,4 @@ Apache 2.0 开源协议 - 详见[LICENSE](LICENSE)
 
 ⭐ 如果你被这个项目感动，请给我们一个star！
 
-🔗 官方链接：[parallelworld.xyz](https://parallelworld.space) *（示例链接）*
+🔗 官方链接：[parallelworld.space](https://parallelworld.space) 
