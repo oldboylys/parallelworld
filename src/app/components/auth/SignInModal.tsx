@@ -2,6 +2,7 @@
 
 import { signIn } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -59,6 +60,114 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
               </svg>
               使用 Google 登录
             </button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">或者</span>
+              </div>
+            </div>
+
+            <div className="w-full">
+              <ConnectButton.Custom>
+                {({
+                  account,
+                  chain,
+                  openAccountModal,
+                  openChainModal,
+                  openConnectModal,
+                  mounted,
+                }) => {
+                  const ready = mounted;
+                  const connected = ready && account && chain;
+
+                  return (
+                    <div
+                      {...(!ready && {
+                        'aria-hidden': true,
+                        style: {
+                          opacity: 0,
+                          pointerEvents: 'none',
+                          userSelect: 'none',
+                        },
+                      })}
+                      className="w-full"
+                    >
+                      {(() => {
+                        if (!connected) {
+                          return (
+                            <button
+                              onClick={openConnectModal}
+                              type="button"
+                              className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-[#6366F1] hover:bg-[#6366F1]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6366F1]/50 transition-all duration-200"
+                            >
+                              连接钱包
+                            </button>
+                          );
+                        }
+
+                        if (chain.unsupported) {
+                          return (
+                            <button
+                              onClick={openChainModal}
+                              type="button"
+                              className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                            >
+                              切换网络
+                            </button>
+                          );
+                        }
+
+                        return (
+                          <div className="w-full flex items-center justify-between gap-2">
+                            <button
+                              onClick={openChainModal}
+                              type="button"
+                              className="flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
+                            >
+                              {chain.hasIcon && (
+                                <div
+                                  style={{
+                                    background: chain.iconBackground,
+                                    width: 20,
+                                    height: 20,
+                                    borderRadius: 999,
+                                    overflow: 'hidden',
+                                    marginRight: 8,
+                                  }}
+                                >
+                                  {chain.iconUrl && (
+                                    <img
+                                      alt={chain.name ?? 'Chain icon'}
+                                      src={chain.iconUrl}
+                                      style={{ width: 20, height: 20 }}
+                                    />
+                                  )}
+                                </div>
+                              )}
+                              {chain.name}
+                            </button>
+
+                            <button
+                              onClick={openAccountModal}
+                              type="button"
+                              className="flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
+                            >
+                              {account.displayName}
+                              {account.displayBalance
+                                ? ` (${account.displayBalance})`
+                                : ''}
+                            </button>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  );
+                }}
+              </ConnectButton.Custom>
+            </div>
           </div>
 
           {/* Close button */}

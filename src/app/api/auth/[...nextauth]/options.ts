@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import fs from "fs";
 import path from "path";
 
@@ -25,6 +26,36 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+    CredentialsProvider({
+      name: 'Wallet',
+      credentials: {
+        address: { label: 'Wallet Address', type: 'text' }
+      },
+      async authorize(credentials) {
+        if (!credentials?.address) return null;
+
+        // 读取现有用户数据
+        const usersData = JSON.parse(fs.readFileSync(USERS_FILE_PATH, 'utf8'));
+        
+        // 检查用户是否已存在
+        let user = usersData.find((u: any) => u.address === credentials.address);
+        
+        if (!user) {
+          // 添加新用户
+          user = {
+            id: credentials.address,
+            address: credentials.address,
+            name: `${credentials.address.slice(0, 6)}...${credentials.address.slice(-4)}`,
+            provider: 'wallet',
+            createdAt: new Date().toISOString(),
+          };
+          usersData.push(user);
+          fs.writeFileSync(USERS_FILE_PATH, JSON.stringify(usersData, null, 2));
+        }
+        
+        return user;
+      }
+    })
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
