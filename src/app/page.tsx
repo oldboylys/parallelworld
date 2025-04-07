@@ -1,35 +1,42 @@
+'use client';
+
 import Image from "next/image";
-import Example from "./components/cloud";
+import Cloud from "./components/cloud";
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useState } from 'react';
+import SignInModal from './components/auth/SignInModal';
 
 export default function Home() {
+  const { data: session } = useSession();
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+
   return (
     <div>
-      <main className="fixed left-1/2 -translate-x-1/2 top-1/2 z-9999 text-5xl font-bold text-blue" >
+      <div className="fixed top-4 right-4 z-50">
+        {session ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-700">欢迎, {session.user?.name}</span>
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-3 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+            >
+              退出登录
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsSignInModalOpen(true)}
+            className="px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+          >
+            登录
+          </button>
+        )}
+      </div>
+      {/* <main className="fixed left-1/2 -translate-x-1/2 top-1/2 z-9999 text-5xl font-bold text-blue">
         Welcome to Parallel World!!!
-      </main>
-      <Example />
+      </main> */}
+      <Cloud />
+      <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
     </div>
-    // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    //   <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-    //     Welcome to Parallel World!!!
-    //   </main>
-    //   <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-    //     <a
-    //       className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-    //       href="https://github.com/oldboylys/parallelworld"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       <Image
-    //         aria-hidden
-    //         src="/globe.svg"
-    //         alt="Globe icon"
-    //         width={16}
-    //         height={16}
-    //       />
-    //       Go to github →
-    //     </a>
-    //   </footer>
-    // </div>
   );
 }

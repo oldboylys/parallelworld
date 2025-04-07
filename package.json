@@ -1,5 +1,7 @@
 {
-  "name": "my-app",
+  "name": "parallelworld",
+  "description": "A Next.js project with Tailwind CSS and React Three Fiber",
+  "author": "oldboylys",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://oldboylys.github.io/parallelworld",
@@ -8,13 +10,17 @@
     "predeploy": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d .next"
   },
   "dependencies": {
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.1",
+    "bcryptjs": "^2.4.3",
+    "framer-motion": "^12.6.3",
+    "jsonwebtoken": "^9.0.2",
     "leva": "^0.10.0",
     "next": "15.2.4",
+    "next-auth": "^4.24.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
